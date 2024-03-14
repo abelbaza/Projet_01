@@ -57,7 +57,7 @@ class GenererFacture:
         for cdr in self.cdr_data:
             if cdr['Type call'] == 0:  # Appel
                 if cdr['Appelant'][:3] == cdr['Appelé'][:3]:  # Même réseau
-                    myfacture = cdr['Durée'] * 0.025
+                    myfacture = (cdr['Durée']/60) * 0.025
                     if cdr['Taxe']== 0: #0 : Aucune taxe
                         self.client.facture += myfacture                        
                     elif cdr['Taxe'] == 1: #Appliquer l'ACCISE 10%
@@ -65,7 +65,7 @@ class GenererFacture:
                     elif cdr['Taxe'] == 2: #Appliquer la TVA 16%
                         self.client.facture += (myfacture + (myfacture * 0.16))                        
                 else:
-                    myfacture += cdr['Durée'] * 0.05
+                    myfacture += (cdr['Durée']/60) * 0.05
                     if cdr['Taxe']== 0: #0 : Aucune taxe
                         self.client.facture += myfacture                        
                     elif cdr['Taxe'] == 1: #Appliquer l'ACCISE 10%
@@ -120,7 +120,7 @@ if __name__ =='__main__':
     generer_facture = GenererFacture(client_cdr, cdr_import.cdr_data)
     generer_facture.generer_facture_client()
     
-    #pour le deuxieme cdr
+    #pour le deuxieme cdrl
     tp_algo = Client("POLYTECHNIQUE", "1960-06-30", "243818140560, 243818140120,")
     cdr_import = ImportCDR("E:/GC/SEMESTER 1/Algo/pro_1/tp_algo.txt")
     generer_facture = GenererFacture(tp_algo, cdr_import.cdr_data)
@@ -129,7 +129,7 @@ if __name__ =='__main__':
     #pour la statistique
     #periode
     debut = "20230111125011" #date du debut de la periode
-    fin = "20230314125011" #date de la fin de la periode
+    fin = "20230114133011" #date de la fin de la periode
     #calcul de la statitistique
     statistiques = Statistiques(cdr_import.cdr_data)
     nb_appels, duree_appels, nb_sms, volume_internet = statistiques.calculer_statistiques(debut,fin)
